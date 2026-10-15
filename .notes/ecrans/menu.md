@@ -23,8 +23,10 @@ Plus la recherche texte, comme sur Home.
 ## Structure (de haut en bas)
 
 - En-tête : titre « Le menu », sous-titre en Pacifico, champ de recherche.
+- En-tête collant (`data-menu-stick`) : pastilles de saveurs + barre de familles restent
+  ensemble en haut au défilement ; seul le titre et la recherche défilent.
 - Pastilles de saveurs (filtre, une seule active, re-tap = désactive).
-- Barre de familles collante, avec les icônes Material déjà prévues dans le design system :
+- Barre de familles, avec les icônes Material déjà prévues dans le design system :
   skillet, dinner_dining, breakfast_dining, bakery_dining, cake, icecream, local_bar,
   nutrition, blender, local_cafe, takeout_dining.
 - Une section par famille : titre en Pacifico (clin d'œil à la carte papier) + lignes compactes.

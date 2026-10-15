@@ -298,14 +298,14 @@ class Component extends DCLogic {
   menuSc() { return this.root && this.root.querySelector('[data-menu-scroll]'); }
   menuTo(k, smooth) {
     const sc = this.menuSc(), sec = sc && sc.querySelector('[data-sec="' + k + '"]'); if (!sec) return;
-    const bar = sc.querySelector('[data-fambar]'), h = bar ? bar.parentElement.offsetHeight : 64;
+    const st = sc.querySelector('[data-menu-stick]'), h = st ? st.offsetHeight : 110;
     this.menuLock = Date.now() + 900;
-    sc.scrollTo({ top: Math.max(0, this.offIn(sec, sc) - h - 44), behavior: smooth && !this.rm() ? 'smooth' : 'auto' });
+    sc.scrollTo({ top: Math.max(0, this.offIn(sec, sc) - h + 2), behavior: smooth && !this.rm() ? 'smooth' : 'auto' });
     this.setState({ mfam: k });
   }
   onMenuScroll(sc) {
     if (this.menuLock && Date.now() < this.menuLock) return;
-    const bar = sc.querySelector('[data-fambar]'), lim = sc.scrollTop + (bar ? bar.parentElement.offsetHeight : 64) + 60;
+    const st = sc.querySelector('[data-menu-stick]'), lim = sc.scrollTop + (st ? st.offsetHeight : 110) + 14;
     let cur = null; sc.querySelectorAll('[data-sec]').forEach(x => { if (cur === null || this.offIn(x, sc) <= lim) cur = x.getAttribute('data-sec'); });
     if (cur && cur !== this.state.mfam) this.setState({ mfam: cur });
   }
@@ -814,7 +814,7 @@ class Component extends DCLogic {
     const mn = {
       q: s.mq, onQ: e => this.setState({ mq: e.target.value.slice(0, 40) }), hasQ: !!s.mq, onClearQ: () => this.setState({ mq: '' }),
       flavs: this.FLAV.map(([k, n, c]) => { const on = s.flav === k; return { name: n, dot: c, bg: on ? '#FFD84D' : '#4E1256', fg: on ? '#3A0B40' : '#FFF6E9', sh: on ? '0 3px 0 #C98A12' : '0 0 0 1.5px rgba(233,211,238,.18)', ring: on ? '0 0 0 2px #3A0B40' : '0 0 0 2px rgba(255,246,233,.3)',
-        onClick: () => { this.snd('tap'); this.setState({ flav: on ? '' : k }); const sc = this.menuSc(), m = sc && sc.querySelector('[data-secs-top]'); if (m && sc.scrollTop > this.offIn(m, sc) - 52) sc.scrollTo({ top: this.offIn(m, sc) - 52 }); } }; }),
+        onClick: () => { this.snd('tap'); this.setState({ flav: on ? '' : k }); const sc = this.menuSc(), m = sc && sc.querySelector('[data-secs-top]'), st = sc && sc.querySelector('[data-menu-stick]'), y = m && st ? this.offIn(m, sc) - st.offsetHeight : 0; if (m && sc.scrollTop > y) sc.scrollTo({ top: y }); } }; }),
       fams: secs.map(x => { const on = x.k === famOn, f = this.FM[x.k]; return { k: x.k, name: f.n, icon: f.icon, bg: on ? 'linear-gradient(#FFD36B,#F7B538)' : '#4E1256', fg: on ? '#3A0B40' : '#FFF6E9', ic: on ? '#3A0B40' : '#FFD84D', sh: on ? '0 3px 0 #C98A12' : '0 0 0 1.5px rgba(233,211,238,.18)', onClick: () => { this.snd('tap'); this.menuTo(x.k, true); } }; }),
       secs, empty: !secs.length, notEmpty: secs.length > 0, emptyTxt: s.mq.trim() ? '« ' + s.mq.trim() + ' »' + (FL ? ' en ' + FL[1].toLowerCase() : '') : FL ? FL[1].toLowerCase() : '',
       onReset: () => this.setState({ mq: '', flav: '' }), onScroll: e => this.onMenuScroll(e.currentTarget),

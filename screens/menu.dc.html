@@ -12,21 +12,20 @@
 <div data-menu-scroll="1" onScroll="{{ mn.onScroll }}" style="position:absolute;inset:0;overflow-y:auto;scrollbar-width:none;padding:54px 0 130px">
 
 <div style="padding:10px 20px 0;display:flex;flex-direction:column"><span style="font:700 26px/30px Fredoka;color:#FFF6E9">Le menu</span><span style="font:400 22px/34px Pacifico;color:#FFD84D">choisis ta douceur</span></div>
-<div style="padding:12px 20px 0"><label style="display:flex;align-items:center;gap:12px;height:56px;padding-inline:20px 6px;border-radius:999px;background:#4E1256;box-shadow:0 0 0 1.5px rgba(255,216,77,.35)"><span style="font:26px/1 'Material Symbols Rounded';font-variation-settings:'wght' 600;color:#FFD84D">search</span><input value="{{ mn.q }}" onChange="{{ mn.onQ }}" placeholder="Nutella, choux, mojito…" style="flex:1;min-width:0;height:48px;padding:0;border:0;outline:none;background:none;font:500 16px/24px Nunito;color:#FFF6E9"><sc-if value="{{ mn.hasQ }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ mn.onClearQ }}" aria-label="Effacer" style="flex:none;width:44px;height:44px;border:0;border-radius:50%;background:rgba(0,0,0,.25);display:grid;place-items:center;font:22px/1 'Material Symbols Rounded';color:#FFF6E9;cursor:pointer">close</button></sc-if></label></div>
+<div style="position:relative;z-index:6;padding:12px 20px 0"><label style="display:flex;align-items:center;gap:12px;height:56px;padding-inline:20px 6px;border-radius:999px;background:#4E1256;box-shadow:0 0 0 1.5px rgba(255,216,77,.35)"><span style="font:26px/1 'Material Symbols Rounded';font-variation-settings:'wght' 600;color:#FFD84D">search</span><input value="{{ mn.q }}" onChange="{{ mn.onQ }}" placeholder="Nutella, choux, mojito…" style="flex:1;min-width:0;height:48px;padding:0;border:0;outline:none;background:none;font:500 16px/24px Nunito;color:#FFF6E9"><sc-if value="{{ mn.hasQ }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ mn.onClearQ }}" aria-label="Effacer" style="flex:none;width:44px;height:44px;border:0;border-radius:50%;background:rgba(0,0,0,.25);display:grid;place-items:center;font:22px/1 'Material Symbols Rounded';color:#FFF6E9;cursor:pointer">close</button></sc-if></label></div>
 
-<div style="padding:18px 20px 0;font:800 12px/16px Nunito;letter-spacing:.06em;color:#FFD84D">TA SAVEUR&nbsp;?</div>
+<div data-menu-stick="1" style="position:sticky;top:-54px;z-index:5;margin-top:-46px;padding:64px 0 12px;background:linear-gradient(#3A0B40 90%,rgba(58,11,64,0))">
+<div style="padding:0 20px;font:800 12px/16px Nunito;letter-spacing:.06em;color:#FFD84D">TA SAVEUR&nbsp;?</div>
 <div style="display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:8px 20px 6px">
 <sc-for list="{{ mn.flavs }}" as="fl" hint-placeholder-count="7"><button type="button" onClick="{{ fl.onClick }}" style="flex:none;display:flex;align-items:center;gap:8px;height:48px;padding-inline:8px 16px;border:0;border-radius:999px;background:{{ fl.bg }};box-shadow:{{ fl.sh }};cursor:pointer;transition:transform 420ms cubic-bezier(.34,1.56,.64,1)" style-active="transform:translateY(3px) scale(.95);transition:transform 90ms ease-out"><span style="width:28px;height:28px;border-radius:50%;background:{{ fl.dot }};box-shadow:{{ fl.ring }}"></span><span style="font:600 15px/1 Fredoka;color:{{ fl.fg }}">{{ fl.name }}</span></button></sc-for>
 </div>
-
-<div data-secs-top="1"></div>
 <sc-if value="{{ mn.notEmpty }}" hint-placeholder-val="{{ true }}">
-<div style="position:sticky;top:46px;z-index:5;padding:8px 0 12px;background:linear-gradient(#3A0B40 78%,rgba(58,11,64,0))">
-<div data-fambar="1" style="display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:0 20px">
+<div data-fambar="1" style="display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:2px 20px 0">
 <sc-for list="{{ mn.fams }}" as="f" hint-placeholder-count="6"><button type="button" data-fam="{{ f.k }}" onClick="{{ f.onClick }}" style="flex:none;display:flex;align-items:center;gap:6px;height:44px;padding-inline:12px 16px;border:0;border-radius:999px;background:{{ f.bg }};box-shadow:{{ f.sh }};cursor:pointer;transition:transform 420ms cubic-bezier(.34,1.56,.64,1)" style-active="transform:translateY(2px) scale(.95);transition:transform 90ms ease-out"><span style="font:20px/1 'Material Symbols Rounded';font-variation-settings:'FILL' 1;color:{{ f.ic }}">{{ f.icon }}</span><span style="font:600 15px/1 Fredoka;color:{{ f.fg }};white-space:nowrap">{{ f.name }}</span></button></sc-for>
 </div>
-</div>
 </sc-if>
+</div>
+<div data-secs-top="1"></div>
 
 <sc-for list="{{ mn.secs }}" as="sec" hint-placeholder-count="3">
 <section data-sec="{{ sec.k }}" style="padding:14px 20px 4px">
