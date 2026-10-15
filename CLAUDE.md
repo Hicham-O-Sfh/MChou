@@ -82,8 +82,13 @@ Chaque page = un template dans `<x-dc>…</x-dc>` + (optionnel) un script de log
   combinaison des options qui changent le prix. `optUnit()` calcule un prix, `defLine()` la
   ligne panier par défaut. `CATS` = les 5 familles mises en avant sur Home (`pop: 1`).
 - Ligne de panier : `{ id, v (options lisibles), ex (suppléments), sugar, note, unit, qty }`.
-- Feuille d'options (`sheets/options`) : fiche produit générique, ouverte par `openOpts(id)`
-  depuis le Menu et Home ; la crêpe Nutella banane garde son builder.
+- `openOpts(id)` route le tap sur un produit : les familles avec `bld` (crêpes, spéciales,
+  spaghetti, gaufres, brownies, choux) ouvrent le **builder** (`openBuilder(id)`), les boissons
+  et packs ouvrent la feuille d'options (`sheets/options`).
+- Builder générique : état `bid` (produit), `bsel` (options), `ex` (suppléments), `sugar`
+  (seulement si la famille a `sugar`). `bVis()` décrit l'assiette : forme (`bld`), échelle de la
+  zone de garnitures, couleurs de nappage (`SAUCE`) d'après le nom, garnitures incluses, choux
+  (4/6, crème si farcis), taille du brownie. Spec : `.notes/ecrans/builder.md`.
 - Feedback : `toastShow()`, `snd()` (sons WebAudio), `popEl/shake/burst/confetti`,
   sheets via `state.sheet` (rendues dans la coquille, au-dessus des écrans). Les nouvelles
   sheets vont dans `sheets/` ; les anciennes sont encore inline dans la coquille.

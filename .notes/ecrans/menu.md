@@ -37,7 +37,8 @@ Plus la recherche texte, comme sur Home.
 ## Ajout au panier
 
 - « + » ajoute directement la variante par défaut, le bouton devient un stepper (comme Home).
-- Tap sur la ligne → **feuille d'options** :
+- Tap sur une douceur (crêpes, spaghetti, gaufres, brownies, choux) → **builder**
+  (voir [builder.md](builder.md)). Tap sur une boisson ou un pack → **feuille d'options** :
   - pièces (4 / 6), façon des choux (classiques / farcis), taille (M / L), jus nature / au lait,
     en sélecteurs avec le prix de chaque choix ;
   - crème (vanille / chocolat) pour les choux farcis ;
@@ -132,5 +133,5 @@ commandes personnalisées. Instagram @mchou._._
   la variante par défaut (la moins chère).
 - Orthographe corrigée sur les intitulés évidents (« Box mixte », « Café américain »,
   « Chocolat chaud »), noms produits conservés tels quels (« pistachio », « pistachou »).
-- La feuille d'options sert aussi de fiche produit depuis Home (sauf la crêpe Nutella banane,
-  qui garde son builder).
+- La feuille d'options sert de fiche produit pour les boissons et les packs ; les douceurs
+  ouvrent le builder (décision du 2026-10-14, voir builder.md).

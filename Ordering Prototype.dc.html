@@ -94,7 +94,7 @@
 <div data-scrim="1" onClick="{{ onUpsNo }}" style="position:absolute;inset:0;background:rgba(18,2,21,.6)"></div>
 <div data-panel="1" style="position:absolute;left:0;right:0;bottom:0;padding:10px 20px 36px;border-radius:28px 28px 0 0;background:#4E1256;display:flex;flex-direction:column;gap:14px">
 <span style="align-self:center;width:44px;height:5px;border-radius:9px;background:rgba(233,211,238,.4)"></span>
-<div style="display:flex;align-items:center;gap:10px"><span style="font:26px/1 'Material Symbols Rounded';font-variation-settings:'FILL' 1;color:#8FCB6B">check_circle</span><span style="font:600 16px/20px Fredoka;color:#E9D3EE">Crêpe ajoutée au panier</span></div>
+<div style="display:flex;align-items:center;gap:10px"><span style="font:26px/1 'Material Symbols Rounded';font-variation-settings:'FILL' 1;color:#8FCB6B">check_circle</span><span style="font:600 16px/20px Fredoka;color:#E9D3EE">{{ bName }} est dans ton panier</span></div>
 <span style="font:600 20px/26px Fredoka">Une boisson avec ça&nbsp;?</span>
 <sc-for list="{{ ups }}" as="u" hint-placeholder-count="2"><div style="display:flex;align-items:center;gap:12px"><div style="flex:none;width:56px;height:56px;border-radius:16px;overflow:hidden;background:{{ u.tint }};color:#3A0B40"><image-slot id="{{ u.slot }}" shape="rounded" radius="16" placeholder="{{ u.name }}"></image-slot></div><span style="flex:1;display:flex;flex-direction:column;gap:2px"><span style="font:600 16px/20px Fredoka">{{ u.name }}</span><span style="font:700 15px/18px Fredoka;color:#FFD84D">{{ u.price }} DH</span></span><sc-if value="{{ u.notAdded }}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{ u.onAdd }}" aria-label="Ajouter" style="width:48px;height:48px;border:0;padding:0;border-radius:50%;background:linear-gradient(#FFD36B,#F7B538);box-shadow:inset 0 2px 0 rgba(255,255,255,.6),0 3px 0 #C98A12;display:grid;place-items:center;font:26px/1 'Material Symbols Rounded';font-variation-settings:'wght' 700;color:#3A0B40;cursor:pointer">add</button></sc-if><sc-if value="{{ u.added }}" hint-placeholder-val="{{ false }}"><span style="height:44px;padding-inline:10px 14px;display:flex;align-items:center;gap:6px;border-radius:999px;background:#8FCB6B;font:600 15px/1 Fredoka;color:#24062A"><span style="font:22px/1 'Material Symbols Rounded';font-variation-settings:'FILL' 1">check_circle</span>Ajouté</span></sc-if></div></sc-for>
 <div style="display:flex;gap:10px;margin-top:4px">
@@ -141,15 +141,15 @@ class Component extends DCLogic {
   SHOP = [34.6829, -1.9081];
   HOME0 = [34.6598, -1.9006];
   TW = { sound: true, reduceMotion: false, rtl: false };
-  SCREENS = [['splash', 'Splash'], ['login', 'Google sign-in'], ['phone', 'Phone number'], ['address', 'Address'], ['home', 'Home'], ['menu', 'Menu'], ['builder', 'Crêpe builder'], ['cart', 'Cart'], ['checkout', 'Checkout'], ['confirm', 'Confirmation'], ['track', 'Tracking']];
+  SCREENS = [['splash', 'Splash'], ['login', 'Google sign-in'], ['phone', 'Phone number'], ['address', 'Address'], ['home', 'Home'], ['menu', 'Menu'], ['builder', 'Builder'], ['cart', 'Cart'], ['checkout', 'Checkout'], ['confirm', 'Confirmation'], ['track', 'Tracking']];
   HINTS = {
     splash: 'Auto-advances after 2.6 s, or tap anywhere.',
     login: 'Tap “Continuer avec Google”, then the account. “Continuer avec mon numéro” skips Google.',
     phone: 'Type a Moroccan mobile (6 or 7, then 8 digits) or tap the SIM suggestion. Start with 5 to see the error.',
     address: 'Drag the map: the pin lifts and drops, distance and zone update (6 km around the shop). The street field is required.',
     home: 'Chips and search filter the list. “+” flies to the cart and becomes a stepper. Tap a card for its options (the Nutella banane card opens the builder). “Tout voir” opens the menu. Tap the flame.',
-    menu: 'Flavour chips filter the whole menu, the family bar follows the scroll. “+” adds the cheapest option; tap a row for sizes, cream, toppings. Packs and services at the bottom.',
-    builder: 'Toggle toppings and watch them land. The price counts up; “Ajouter” flies to the bag, then the drink sheet opens.',
+    menu: 'Flavour chips filter the whole menu, the family bar follows the scroll. “+” adds the cheapest option; tap a sweet to open its builder, a drink or pack for its options sheet. Packs and services at the bottom.',
+    builder: 'Any sweet item opens here (tap a row in the menu). Pick options, toggle toppings and watch them land. The price counts up; “Ajouter” flies to the bag, then the drink sheet opens.',
     cart: 'Free-delivery bar at 150 DH, steppers with undo, “Vider” with undo. Promo code: MCHOU10.',
     checkout: 'Cash: bills under the total are disabled and the change is computed. Card: “Scanner ma carte” fills a test card (add any CVV). 4000 0000 0000 0002 is declined after 3-D Secure.',
     confirm: 'Crêpe scene then the scooter, about 7 s. “Passer” skips, the speaker mutes. Miams and streak count up at the end.',
@@ -159,22 +159,22 @@ class Component extends DCLogic {
   SLOT = { 'crepe-nb': 'b-ml-1', 'brownie-bueno': 'b-ml-2', 'brownie-pista': 'b-drop', 'mojito-fraise': 'b-re-2' };
   // Vraie carte M'Chou (.notes/ecrans/menu.md). Prix en DH ; tableau = un prix par combinaison d'options.
   FAMS = [
-    { k: 'crepes', n: 'Crêpes', t: 'Crêpes sucrées', icon: 'skillet', tint: '#F7C873', pre: 'Crêpe ', sub: 'Crêpe sucrée', ex: true, items: [
-      ['Nutella', 20], ['Nutella banane', 25, { id: 'crepe-nb', tag: 'N°1', builder: true, pop: 1 }], ['Oreo', 25], ['Bueno', 25, { pop: 1 }], ['Lotus', 25, { pop: 1 }], ['Amande', 25],
+    { k: 'crepes', n: 'Crêpes', t: 'Crêpes sucrées', icon: 'skillet', tint: '#F7C873', pre: 'Crêpe ', sub: 'Crêpe sucrée', ex: true, bld: 'crepe', sugar: true, desc: 'Crêpe dorée, pliée en quart.', items: [
+      ['Nutella', 20], ['Nutella banane', 25, { id: 'crepe-nb', tag: 'N°1', pop: 1, desc: 'Crêpe dorée, Nutella généreux et rondelles de banane fraîche, pliée en quart.' }], ['Oreo', 25], ['Bueno', 25, { pop: 1 }], ['Lotus', 25, { pop: 1 }], ['Amande', 25],
       ['Nutella crème pistache', 25], ['Nutella pistachio', 30, { pop: 1 }], ['Extra amande pistachio', 30], ['Croquant amande', 35], ['Extra pistachio', 35], ['Filet d’amande', 35]] },
-    { k: 'spaghetti', n: 'Spaghetti', t: 'Spaghetti crêpes', icon: 'dinner_dining', tint: '#F5D2A8', pre: 'Spaghetti crêpe ', sub: 'Spaghetti crêpe', ex: true, items: [
+    { k: 'spaghetti', n: 'Spaghetti', t: 'Spaghetti crêpes', icon: 'dinner_dining', tint: '#F5D2A8', pre: 'Spaghetti crêpe ', sub: 'Spaghetti crêpe', ex: true, bld: 'spaghetti', sugar: true, desc: 'Crêpe coupée en lanières, nappée comme tu l’aimes.', items: [
       ['Nutella', 25], ['Nutella banane', 30], ['Oreo', 30], ['Bueno', 30], ['Lotus', 35], ['Amande', 35],
       ['Nutella crème pistache', 35], ['Nutella pistachio', 40], ['Croquant amande', 40], ['Extra pistachio', 45], ['Filet d’amande', 40]] },
-    { k: 'speciales', n: 'Spéciales', t: 'Crêpes spéciales', icon: 'auto_awesome', tint: '#F3D9B8', pre: 'Crêpe ', sub: 'Crêpe spéciale', ex: true, items: [
+    { k: 'speciales', n: 'Spéciales', t: 'Crêpes spéciales', icon: 'auto_awesome', tint: '#F3D9B8', pre: 'Crêpe ', sub: 'Crêpe spéciale', ex: true, bld: 'crepe', sugar: true, desc: 'Une recette signature de la maison.', items: [
       ['Kunafa pistachio burritos', 38, { tag: 'Nouveau', full: 'Kunafa pistachio burritos' }], ['Brownie chocolat', 35], ['Corne de gazelle', 45],
       ['Brownie dubaï', 50, { soldOut: true }], ['Box mixte', 35, { full: 'Box mixte crêpes' }], ['Enfant', 35]] },
-    { k: 'gaufres', n: 'Gaufres', t: 'Gaufres croustillantes', icon: 'breakfast_dining', tint: '#F5C46A', pre: 'Gaufre ', sub: 'Gaufre croustillante', ex: true, items: [
+    { k: 'gaufres', n: 'Gaufres', t: 'Gaufres croustillantes', icon: 'breakfast_dining', tint: '#F5C46A', pre: 'Gaufre ', sub: 'Gaufre croustillante', ex: true, bld: 'gaufre', sugar: true, desc: 'Gaufre croustillante et dorée.', items: [
       ['Natural', 15], ['Nutella', 20], ['Nutella banane', 25], ['Oreo', 25], ['Lotus', 25], ['Bueno', 25], ['Amande', 25],
       ['Nutella crème pistachio', 25], ['Nutella pistachio', 30], ['Croquant amande', 35], ['Box mixte', 35, { full: 'Box mixte gaufres' }], ['Extra pistachio', 40]] },
-    { k: 'choux', n: 'Choux', t: 'Les choux', icon: 'bakery_dining', tint: '#E8C9A8', pre: 'Choux ', sub: 'Choux', ex: true, ax: ['pcs', 'garn', 'creme'], items: [
+    { k: 'choux', n: 'Choux', t: 'Les choux', icon: 'bakery_dining', tint: '#E8C9A8', pre: 'Choux ', sub: 'Choux', ex: true, bld: 'choux', desc: 'Classiques, ou farcis à la crème vanille ou chocolat.', ax: ['pcs', 'garn', 'creme'], items: [
       ['Nutella', [12, 15, 18, 24], { pop: 1 }], ['Bueno', [13, 16, 20, 25]], ['Lotus', [16, 20, 22, 27], { pop: 1 }], ['Oreo', [15, 20, 20, 26]],
       ['Croquant amande', [20, 25, 30, 35]], ['Pistache', [20, 25, 25, 30], { pop: 1 }], ['Amande', [16, 20, 22, 27]], ['Box mixte', [20, 25, 25, 30], { full: 'Box mixte choux' }]] },
-    { k: 'brownies', n: 'Brownies', t: 'Les brownies', icon: 'cake', tint: '#C9A27E', pre: 'Brownie ', sub: 'Brownie', note: 'Kunafa pistachou & crème fromagère', ex: true, ax: ['taille'], items: [
+    { k: 'brownies', n: 'Brownies', t: 'Les brownies', icon: 'cake', tint: '#C9A27E', pre: 'Brownie ', sub: 'Brownie', note: 'Kunafa pistachou & crème fromagère', ex: true, bld: 'brownie', desc: 'Brownie fondant, avec kunafa pistachou et crème fromagère.', ax: ['taille'], items: [
       ['Nutella', [27, 49]], ['Bueno', [28, 50], { id: 'brownie-bueno', pop: 1 }], ['Nutella pistachou', [30, 55]], ['Nutella crème pistachio', [28, 50]], ['Amande', [30, 55]],
       ['Croquant amande', [35, 55]], ['Lotus', [30, 55], { pop: 1 }], ['Oreo', [30, 55]], ['Extra pistachio', [35, 59], { id: 'brownie-pista', tag: 'DROP', pop: 1 }], ['Box mixte', [30, 55], { full: 'Box mixte brownies' }]] },
     { k: 'packs', n: 'Packs', t: 'Packs famille', icon: 'redeem', tint: '#FFE08A', pre: '', sub: 'Pack famille', pack: true, items: [
@@ -206,6 +206,8 @@ class Component extends DCLogic {
     ['bueno', 'Bueno', '#E7B97A', '#F3D9B8', /bueno/i], ['oreo', 'Oreo', '#2B1409', '#E9E1EC', /oreo/i], ['amande', 'Amande', '#EAD7BF', '#F3E6D3', /amande|gazelle/i],
     ['fruit', 'Fruité', '#FF4D6D', '#FFD1DA', /fraise|banane|framboise|mangue|kiwi|ananas|citron|orange|pomme|passion|blueberry|avocat/i]
   ];
+  SAUCE = { nutella: ['#8A5636', '#4B2615', '#351A0D'], pistache: ['#CDEBB0', '#8FCB6B', '#5E9A3E'], lotus: ['#E6A866', '#C77B30', '#9A5A1E'], bueno: ['#F6DDB2', '#E7B97A', '#B98A4E'],
+    oreo: ['#FFFFFF', '#EFE8DE', '#CFC2B0'], amande: ['#FFF6E6', '#EAD7BF', '#C9A06A'], chocolat: ['#7A4A30', '#4B2615', '#2B1409'] };
   FM = Object.fromEntries(this.FAMS.map(f => [f.k, f]));
   P = this.buildP();
   EX = [
@@ -222,7 +224,7 @@ class Component extends DCLogic {
     phone: '', phoneBlur: false, phoneFocus: false,
     q: 'Hay Al Qods', city: 'Oujda', street: '', mark: '', label: 'Maison', ll: [34.6598, -1.9006], dist: 2.7, inZone: true, addrEdit: false,
     cat: 'crepes', query: '', cart: [], mq: '', flav: '', mfam: 'crepes', po: null, favs: { 'crepe-nb': true },
-    ex: {}, sugar: true, bqty: 1, note: '', bAdded: false, upsAdded: {},
+    bid: 'crepe-nb', bsel: {}, ex: {}, sugar: true, bqty: 1, note: '', bAdded: false, upsAdded: {},
     promo: '', promoOk: false, promoErr: false, when: 'asap', slot: '',
     pay: 'cash', bill: null, num: '', exp: '', cvv: '', cname: '', cardTry: false, saveCard: true, payErr: '',
     tds: false, otp: '', tdsBusy: false, tdsSms: false, busy: false,
@@ -243,9 +245,29 @@ class Component extends DCLogic {
       const prices = Array.isArray(pr) ? pr : [pr];
       P[id] = { id, name, full: o.full || (f.pre && !brand.test(name) ? f.pre + name.charAt(0).toLowerCase() + name.slice(1) : f.pre + name), sub: hint || f.sub, hint, d: o.d || '',
         price: Math.min.apply(null, prices), prices, multi: prices.length > 1, ax, ex: !!f.ex, cat: f.k, icon: o.icon || f.icon, tint: o.tint || (ft ? ft[3] : f.tint),
-        flav: fl, tag: o.tag, soldOut: !!o.soldOut, builder: !!o.builder, pop: !!o.pop };
+        flav: fl, tag: o.tag, soldOut: !!o.soldOut, pop: !!o.pop, bld: f.bld || '', sugar: !!f.sugar, desc: o.desc || f.desc || '' };
     }));
     return P;
+  }
+  bVis(p, sel) {
+    const nm = p.name.toLowerCase(), shape = p.bld || 'crepe';
+    const hit = [['nutella', /nutella|box/], ['pistache', /pista|duba/], ['lotus', /lotus/], ['bueno', /bueno/], ['oreo', /oreo/], ['amande', /amande|gazelle/], ['chocolat', /chocolat|brownie/]]
+      .map(([k, r]) => [k, nm.search(r)]).filter(x => x[1] >= 0).sort((a, b) => a[1] - b[1]).map(x => x[0]);
+    const C = this.SAUCE[hit[0]], C2 = this.SAUCE[hit[1]], inc = {};
+    [['banane', /banane/], ['pistache', /pista/], ['amande', /amande/], ['lotus', /lotus/], ['oreo', /oreo/], ['kunafa', /kunafa|duba/], ['bueno', /bueno/]].forEach(([k, r]) => { inc[k] = r.test(nm); });
+    const L = sel.taille === 'L', bw = L ? 176 : 144, choux = shape === 'choux';
+    const pos = sel.pcs === '6' ? [[14, 46], [71, 38], [128, 46], [14, 106], [71, 114], [128, 106]] : [[40, 42], [102, 42], [40, 104], [102, 104]];
+    const LB = { nutella: 'Nutella', pistache: 'Pistache', lotus: 'Lotus', bueno: 'Bueno', oreo: 'Oreo', amande: 'Amande', chocolat: 'Chocolat', banane: 'Banane', kunafa: 'Kunafa' };
+    const chips = hit.concat(Object.keys(inc).filter(k => inc[k])).filter((k, i, a) => a.indexOf(k) === i).map(k => ({ name: LB[k] }));
+    if (shape === 'crepe' || shape === 'spaghetti') chips.push({ name: 'Pâte maison' });
+    return {
+      crepe: shape === 'crepe', spaghetti: shape === 'spaghetti', gaufre: shape === 'gaufre', brownie: shape === 'brownie', choux,
+      k: { spaghetti: .92, gaufre: .8, brownie: L ? .84 : .68, choux: .86 }[shape] || 1, bw, bo: 22 + (200 - bw) / 2,
+      sp: C && !choux ? 1 : 0, spk: shape === 'spaghetti' ? .6 : 1, s1: (C || [])[0] || 'transparent', s2: (C || [])[1] || 'transparent', s3: (C || [])[2] || 'transparent',
+      drz: C2 && !choux ? 1 : 0, d1: (C2 || [])[1] || 'transparent', incBan: inc.banane ? 1 : 0, bueno: inc.bueno ? 1 : 0, inc,
+      puffs: pos.map(([x, y], i) => ({ x, y, g: ((i % 2 && C2) || C || ['', '#F1D9A8'])[1] })), cream: sel.garn === 'farcis' ? 1 : 0, creamC: sel.creme === 'chocolat' ? '#6B3A22' : '#FFF4CF',
+      chips, watch: { crepe: 'Regarde ta crêpe se garnir', spaghetti: 'Regarde tes spaghetti se garnir', gaufre: 'Regarde ta gaufre se garnir', brownie: 'Regarde ton brownie se garnir', choux: 'Regarde tes choux se garnir' }[shape]
+    };
   }
   axOn(a, sel) { const w = this.AX[a].when; return !w || Object.keys(w).every(k => sel[k] === w[k]); }
   defSel(p) { const sel = {}; p.ax.forEach(a => { sel[a] = this.AX[a].o[0][0]; }); return sel; }
@@ -261,7 +283,7 @@ class Component extends DCLogic {
   poPrice(s) { const o = s.po, p = o && this.P[o.id]; return p ? this.optUnit(p, o.sel, o.ex) * o.qty : null; }
   openOpts(id) {
     const p = this.P[id]; if (!p || p.soldOut) return;
-    if (p.builder) { this.openBuilder(); return; }
+    if (p.bld) { this.openBuilder(id); return; }
     this.snd('tap');
     this.setState(s => ({ po: { id, sel: this.defSel(p), ex: {}, qty: 1 }, sheet: 'opts', tw: Object.assign({}, s.tw, { o: null }) }));
   }
@@ -319,7 +341,7 @@ class Component extends DCLogic {
     if (s.caption && s.caption !== ps.caption) this.popEl('[data-caption]');
     { const a = this.poPrice(ps), b = this.poPrice(s); if (a != null && b != null && a !== b && ps.po.id === s.po.id) this.tween('o', s.tw.o != null ? s.tw.o : a, b); }
     if (ps.mfam !== s.mfam && s.screen === 'menu') { const bar = this.root && this.root.querySelector('[data-fambar]'), c = bar && bar.querySelector('[data-fam="' + s.mfam + '"]'); if (c) bar.scrollTo({ left: Math.max(0, c.offsetLeft - 20), behavior: this.rm() ? 'auto' : 'smooth' }); }
-    if (ps.ex !== s.ex || ps.bqty !== s.bqty) { const a = this.bPrice(ps), b = this.bPrice(s); if (a !== b) this.tween('b', s.tw.b != null ? s.tw.b : a, b); }
+    if (ps.ex !== s.ex || ps.bqty !== s.bqty || ps.bsel !== s.bsel || ps.bid !== s.bid) { const a = this.bPrice(ps), b = this.bPrice(s); if (a !== b) this.tween('b', s.tw.b != null ? s.tw.b : a, b); }
     const ta = this.totals(ps), tb = this.totals(s);
     if (ta.total !== tb.total) this.tween('ct', s.tw.ct != null ? s.tw.ct : ta.total, tb.total);
     if (!ta.free && tb.free && s.screen === 'cart') { this.snd('win'); this.burst('[data-freebar]', 28); }
@@ -511,15 +533,20 @@ class Component extends DCLogic {
     }, 700);
   }
 
-  bUnit(s) { s = s || this.state; return 25 + this.EX.reduce((a, e) => a + (s.ex[e.k] ? e.p : 0), 0); }
+  bUnit(s) { s = s || this.state; return this.optUnit(this.P[s.bid], s.bsel, s.ex); }
   bPrice(s) { s = s || this.state; return this.bUnit(s) * s.bqty; }
-  openBuilder() { this.snd('tap'); this.setState(s => ({ ex: {}, sugar: true, bqty: 1, note: '', bAdded: false, upsAdded: {}, tw: Object.assign({}, s.tw, { b: null }) })); this.go('builder'); }
+  openBuilder(id) { id = id || 'crepe-nb'; const p = this.P[id]; this.snd('tap'); this.setState(s => ({ bid: id, bsel: this.defSel(p), ex: {}, sugar: true, bqty: 1, note: '', bAdded: false, upsAdded: {}, tw: Object.assign({}, s.tw, { b: null }) })); this.go('builder'); }
   toggleEx(k) {
     const on = !this.state.ex[k], e = this.EX.find(x => x.k === k);
     this.setState(s => ({ ex: Object.assign({}, s.ex, { [k]: on }), bAdded: false }), () => { if (on) this.dropTop(k); });
     this.snd(on ? 'pop' : 'off'); this.buzz(6);
     const pl = this.root && this.root.querySelector('[data-plate]');
     if (pl) { const r = this.rel(pl); this.floatTxt(r.x, r.y - 100, (on ? '+' : '−') + e.p + ' DH', on ? '#FFD84D' : '#C9A9D1'); }
+  }
+  setBsel(a, v) {
+    this.setState(s => ({ bsel: Object.assign({}, s.bsel, { [a]: v }), bAdded: false }));
+    this.snd('pop'); this.buzz(6);
+    const cr = this.root && this.root.querySelector('[data-crepe]'); if (cr && !this.rm()) cr.animate([{ scale: '1' }, { scale: '.94' }, { scale: '1.04' }, { scale: '1' }], { duration: 480, easing: 'ease-out' });
   }
   toggleSugar() { const on = !this.state.sugar; this.setState({ sugar: on, bAdded: false }); this.snd(on ? 'pop' : 'off'); }
   dropTop(k) {
@@ -529,9 +556,9 @@ class Component extends DCLogic {
   }
   addBuilder() {
     if (this.state.bAdded) return;
-    const s = this.state, line = { id: 'crepe-nb', ex: this.EX.filter(x => s.ex[x.k]).map(x => x.n), sugar: s.sugar, note: s.note.trim(), unit: this.bUnit(), qty: s.bqty };
+    const s = this.state, p = this.P[s.bid], line = { id: s.bid, v: this.optLabel(p, s.bsel), ex: this.EX.filter(x => s.ex[x.k]).map(x => x.n), sugar: p.sugar ? s.sugar : true, note: s.note.trim(), unit: this.bUnit(), qty: s.bqty };
     this.setState({ bAdded: true });
-    this.fly(this.root.querySelector('[data-crepe]'), 'skillet', () => { this.addLine(line); this.later(() => this.setState({ sheet: 'upsell' }), 380); }, 64);
+    this.fly(this.root.querySelector('[data-crepe]'), this.P[s.bid].icon, () => { this.addLine(line); this.later(() => this.setState({ sheet: 'upsell' }), 380); }, 64);
   }
   lineKey(l) { return l.id + '|' + (l.v || '') + '|' + (l.ex || []).join(',') + '|' + (l.sugar === false ? 0 : 1) + '|' + (l.note || ''); }
   addLine(l) { this.setState(s => { const k = this.lineKey(l), cart = s.cart.slice(), i = cart.findIndex(x => this.lineKey(x) === k); if (i >= 0) cart[i] = Object.assign({}, cart[i], { qty: Math.min(20, cart[i].qty + l.qty) }); else cart.push(Object.assign({}, l)); return { cart }; }); }
@@ -737,9 +764,10 @@ class Component extends DCLogic {
     const tt = s.toast;
     const toast = tt ? { icon: tt.icon, color: tt.color, text: tt.text, hasAction: !!tt.action, label: tt.action ? tt.action.label : '', onAction: () => { const a = tt.action; this.setState({ toast: null }); if (a) a.fn(); } } : { icon: '', color: '#FFF6E9', text: '', hasAction: false, label: '', onAction: null };
     const sw = on => ({ op: on ? 1 : 0, ring: on ? '0 0 0 2px #FFD84D' : '0 0 0 1.5px rgba(233,211,238,.14)', track: on ? '#FFD84D' : 'rgba(0,0,0,.3)', tsh: on ? 'inset 0 -2px 0 #C98A12' : 'inset 0 0 0 1.5px rgba(233,211,238,.3)', knob: on ? '26px' : '4px', kbg: on ? '#3A0B40' : '#C9A9D1' });
-    const bx = {}; this.EX.forEach(e => { bx[e.k] = Object.assign(sw(!!s.ex[e.k]), { onClick: () => this.toggleEx(e.k) }); });
-    bx.sucre = Object.assign(sw(s.sugar), { onClick: () => this.toggleSugar() });
-    const lines = s.cart.map((l, i) => { const p = P[l.id], d = [l.v].filter(Boolean).concat((l.ex || []).map(x => '+ ' + x)); if (l.id === 'crepe-nb' && l.sugar === false) d.push('Sans sucre glace'); if (l.note) d.push('« ' + l.note + ' »'); return { slot: this.slot(l.id), name: p.full, desc: d.length ? d.join(' · ') : p.sub, price: l.unit * l.qty, qty: l.qty, one: l.qty === 1, many: l.qty > 1, tint: p.tint, onMinus: () => this.lineQty(i, -1), onPlus: () => this.lineQty(i, 1) }; });
+    const bp = P[s.bid] || P['crepe-nb'], bv = this.bVis(bp, s.bsel);
+    const bx = {}; this.EX.forEach(e => { bx[e.k] = Object.assign(sw(!!s.ex[e.k]), { onClick: () => this.toggleEx(e.k) }); if (e.k !== 'banane' && bv.inc[e.k]) bx[e.k].op = 1; });
+    bx.sucre = Object.assign(sw(s.sugar), { onClick: () => this.toggleSugar() }); if (!bp.sugar) bx.sucre.op = 0;
+    const lines = s.cart.map((l, i) => { const p = P[l.id], d = [l.v].filter(Boolean).concat((l.ex || []).map(x => '+ ' + x)); if (l.sugar === false) d.push('Sans sucre glace'); if (l.note) d.push('« ' + l.note + ' »'); return { slot: this.slot(l.id), name: p.full, desc: d.length ? d.join(' · ') : p.sub, price: l.unit * l.qty, qty: l.qty, one: l.qty === 1, many: l.qty > 1, tint: p.tint, onMinus: () => this.lineQty(i, -1), onPlus: () => this.lineQty(i, 1) }; });
     const ctShown = s.tw.ct != null ? s.tw.ct : t.total;
     const tot = { sub: t.sub, fee: t.fee ? t.fee + ' DH' : 'Offerte', feeColor: t.fee ? '#FFF6E9' : '#8FCB6B', disc: t.disc, hasDisc: t.disc > 0, total: ctShown };
     const free = { pct: t.pct + '%', left: t.left, done: t.free, notDone: !t.free, sub: t.free ? 'Dès 150 DH, la livraison est pour nous.' : t.sub + ' / 150 DH · sinon livraison 15 DH' };
@@ -804,6 +832,9 @@ class Component extends DCLogic {
         qty: po.qty, minusFg: po.qty > 1 ? '#FFD84D' : 'rgba(201,169,209,.5)', total: s.tw.o != null ? s.tw.o : tot,
         onMinus: () => { if (po.qty > 1) { this.snd('off'); this.setPo({ qty: po.qty - 1 }); } }, onPlus: () => { if (po.qty < 9) { this.snd('pop'); this.setPo({ qty: po.qty + 1 }); } }, onAdd: () => this.addOpts() });
     }
+    const bAxes = bp.ax.filter(a => this.axOn(a, s.bsel)).map(a => { const A = this.AX[a]; return { n: A.n, opts: A.o.map(([val, lb]) => {
+      const on = s.bsel[a] === val, sel2 = Object.assign({}, s.bsel, { [a]: val }), pr = A.price ? this.optUnit(bp, sel2) + ' DH' : A.add && val ? '+' + A.add + ' DH' : '';
+      return Object.assign(chip(on), { bg: on ? '#FFD84D' : '#4E1256', label: lb, price: pr, hasPrice: !!pr, onClick: () => { if (!on) this.setBsel(a, val); } }); }) }; });
     const v = {
       rootRef: this.rootRef, fxRef: this.fxRef, addrMapRef: this.addrMapRef, trackMapRef: this.trackMapRef,
       scale: s.scale, wrapW: Math.round(410 * s.scale), wrapH: Math.round(864 * s.scale), dir: rtl ? 'rtl' : 'ltr', flip,
@@ -853,7 +884,9 @@ class Component extends DCLogic {
       onBPlus: () => { if (this.state.bqty < 9) { this.setState(x => ({ bqty: x.bqty + 1, bAdded: false })); this.snd('pop'); } },
       bNote: s.note, onBNote: e => this.setState({ note: e.target.value.slice(0, 120) }), bNoteLen: s.note.length,
       onBAdd: () => this.addBuilder(), bAddIdle: !s.bAdded, bAddDone: s.bAdded,
-      favColor: s.favs['crepe-nb'] ? '#FF4D6D' : '#FFF6E9', favFill: s.favs['crepe-nb'] ? 1 : 0, onBFav: e => this.toggleFav('crepe-nb', e.currentTarget),
+      favColor: s.favs[bp.id] ? '#FF4D6D' : '#FFF6E9', favFill: s.favs[bp.id] ? 1 : 0, onBFav: e => this.toggleFav(bp.id, e.currentTarget),
+      bv, bName: bp.full, bDesc: bp.desc, bBase: this.optUnit(bp, s.bsel), bSugar: bp.sugar, bTagOn: !!bp.tag, bTag: { 'N°1': 'N°1 DES VENTES', DROP: 'DROP DU JOUR', Nouveau: 'NOUVEAU' }[bp.tag] || '',
+      bTagBg: (TAGS[bp.tag] || TAGS['N°1'])[0], bTagFg: (TAGS[bp.tag] || TAGS['N°1'])[1], bAxes, hasBAxes: bAxes.length > 0,
       ups, upsNoLabel: Object.keys(s.upsAdded).length ? 'Continuer' : 'Non merci',
       onUpsNo: () => this.closeSheet(() => { this.go(this.state.hist[this.state.hist.length - 1] === 'menu' ? 'menu' : 'home', { reset: true, back: true }); this.toastShow('Ajouté au panier', 'check_circle', '#8FCB6B', { label: 'Voir', fn: () => this.go('cart') }); }),
       onUpsCart: () => this.closeSheet(() => this.go('cart')),
