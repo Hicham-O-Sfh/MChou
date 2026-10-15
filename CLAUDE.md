@@ -13,13 +13,16 @@ Méthodologie de travail détaillée : [.notes/methodologie.md](.notes/methodolo
 - **Images** : les placeholders `<image-slot>` suffisent. Pas d'upload. Si une vraie photo est
   nécessaire, elle est posée dans `assets/photos/` et référencée par l'attribut `src` du slot.
 - **Réglages figés** : son activé, Reduce motion désactivé, LTR (voir `TW` dans le script).
+- **Données = vraie carte M'Chou** (photos de la carte papier) partout : Menu, Home, builder,
+  panier. Retranscription et décisions : [.notes/ecrans/menu.md](.notes/ecrans/menu.md).
 
 ## Fichiers
 
 | Fichier | Rôle |
 |---|---|
 | `Ordering Prototype.dc.html` | Coquille du prototype : panneau de gauche, cadre téléphone, barre d'état, nav, sheets, toast, **toute la logique** |
-| `screens/<id>.dc.html` | Template d'un écran (10 écrans : splash → track). Pas de logique |
+| `screens/<id>.dc.html` | Template d'un écran (11 écrans : splash → track). Pas de logique |
+| `sheets/<nom>.dc.html` | Template d'une feuille (bottom sheet) importée par la coquille. Pas de logique |
 | `Design System.dc.html` | Référence visuelle : couleurs, typo, formes, espaces, mouvement, icônes, composants |
 | `Explorations.dc.html` | Comparaison statique des thèmes « Nutella Fun » (clair) et « Fidèle » (retenu) |
 | `tokens/mchou.tokens.css` / `.json` | Tokens du design system (v0.2). **Non consommés par les pages** — voir plus bas |
@@ -73,9 +76,17 @@ Chaque page = un template dans `<x-dc>…</x-dc>` + (optionnel) un script de log
 - Écrans : racine `data-screen="<id>"` + `data-screen-label="NN Nom"`. Ordre dans `SCREENS`,
   aide du panneau gauche dans `HINTS`.
 - Navigation : `this.go('<id>')`, `this.back()`, `this.soon('Nom')` pour un écran pas encore fait.
-- Données de démo : produits `P`, catégories `CATS`, suppléments `EX`, état initial `state`.
+- Catalogue : `FAMS` (familles de la carte, avec leurs produits et prix), `AX` (options :
+  pièces, façon, crème, taille, nature/au lait, arôme), `FLAV` (saveurs du filtre), `EX`
+  (suppléments). `buildP()` en déduit `P` (produits par id). Un prix en tableau = un prix par
+  combinaison des options qui changent le prix. `optUnit()` calcule un prix, `defLine()` la
+  ligne panier par défaut. `CATS` = les 5 familles mises en avant sur Home (`pop: 1`).
+- Ligne de panier : `{ id, v (options lisibles), ex (suppléments), sugar, note, unit, qty }`.
+- Feuille d'options (`sheets/options`) : fiche produit générique, ouverte par `openOpts(id)`
+  depuis le Menu et Home ; la crêpe Nutella banane garde son builder.
 - Feedback : `toastShow()`, `snd()` (sons WebAudio), `popEl/shake/burst/confetti`,
-  sheets via `state.sheet` (rendues dans la coquille, au-dessus des écrans).
+  sheets via `state.sheet` (rendues dans la coquille, au-dessus des écrans). Les nouvelles
+  sheets vont dans `sheets/` ; les anciennes sont encore inline dans la coquille.
 - Réglages : constante `TW = { sound, reduceMotion, rtl }`. `rm()` respecte aussi le réglage
   « réduire les animations » du système.
 - Cadre téléphone 390×844 avec mise à l'échelle auto.
