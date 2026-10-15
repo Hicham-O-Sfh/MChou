@@ -13,7 +13,7 @@ spécification visuelle et comportementale pour le développement Flutter.
 |---|---|
 | **Retouche** (texte, couleur, espacement) | Modif directe → vérif navigateur → validation |
 | **Nouvel écran / parcours** | Spec courte dans `.notes/ecrans/<id>.md` → validation de la spec → réalisation → vérif → validation |
-| **Évolution du design system** (nouvelle couleur, nouveau composant) | Décision notée dans `decisions.md` → mise à jour `Design System.dc.html` + `tokens/` → application aux écrans |
+| **Évolution du design system** (nouvelle couleur, nouveau composant) | Décision notée dans `decisions.md` → mise à jour `Design-System.dc.html` + `tokens/` → application aux écrans |
 
 ## Cycle d'une modification
 
@@ -28,7 +28,7 @@ spécification visuelle et comportementale pour le développement Flutter.
 
 ## Checklist design avant validation
 
-- Un seul CTA doré par écran ; framboise réservée aux favoris, badges et promos flash.
+- Un seul CTA doré par écran ; framboise réservée à la flamme, aux badges et promos flash.
 - Cibles tactiles ≥ 48 px ; boutons pill ; rayons 12 / 20 / 28.
 - Espacements sur la grille de 4 pt, gouttière 20 px.
 - Typo : Pacifico seulement en accent ; Fredoka titres/boutons/prix ; Nunito texte.

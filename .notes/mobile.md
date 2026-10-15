@@ -1,43 +1,29 @@
-# Prototype sur téléphone (à faire plus tard)
+# Prototype sur téléphone
 
 But : ouvrir la maquette interactive sur mon téléphone (Samsung Galaxy S25 FE, Android/Chrome),
-seulement la partie téléphone, sans le panneau de gauche. Idée validée le 2026-10-15, pas encore
-réalisée.
+en plein écran, lancée depuis une icône sur l'écran d'accueil.
 
-## 1. Mode téléphone dans la coquille
+## Fait (2026-10-15)
 
-Dans `Ordering Prototype.dc.html`, actif sur écran étroit ou avec `?mobile` dans l'URL :
+- **Mode téléphone** dans `Ordering-Prototype.dc.html` (`MOB`), actif sur écran ≤ 600 px ou avec
+  `?mobile` : pas de panneau de gauche, pas de cadre ni de fausse barre d'état, l'app occupe tout
+  l'écran (largeur 390 mise à l'échelle, hauteur adaptée). Zoom au double-tap bloqué.
+- **PWA** : `manifest.json` (nom, couleurs `#3A0B40`, `display: standalone`, démarre sur
+  `Ordering-Prototype.dc.html?mobile`) et icônes `icons/icon-192.png` / `icon-512.png`.
+- Fichiers renommés sans espace : `Ordering-Prototype.dc.html`, `Design-System.dc.html`.
+- `index.html` à la racine redirige vers la coquille (URL GitHub Pages plus courte).
 
-- masquer le panneau de gauche ;
-- plus de cadre téléphone ni de mise à l'échelle 390×844 : l'app occupe tout l'écran ;
-- masquer la fausse barre d'état (« 9:41 »), respecter les zones sûres
-  (`env(safe-area-inset-*)`, `viewport-fit=cover`) ;
-- bloquer le zoom au double-tap (`user-scalable=no`, `touch-action`).
+## À faire
 
-## 2. Hébergement : GitHub Pages (piste préférée)
-
-- HTTPS fourni, accessible partout (pas besoin du PC allumé).
-- Internet reste nécessaire (React via unpkg, Google Fonts, Material Symbols, tuiles OSM).
-- **Piège d'encodage** : le runtime charge les écrans via `dc-import name="screens/<id>"`, ce
-  qui donne l'URL `screens%2F<id>.dc.html` (slash encodé). Notre serveur Python la résout en
-  sous-dossier ; GitHub Pages probablement pas (à tester).
-  - Renommer `Ordering Prototype.dc.html` en `Ordering-Prototype.dc.html` est bien (espace
-    en moins dans l'URL), mais **ne règle pas** ce `%2F`.
-  - Pistes : noms à plat sans slash (`screens-menu.dc.html` ou dossier supprimé), ou copie
-    des fichiers sous le nom encodé au déploiement.
-  - Penser à mettre à jour tous les `dc-import`, `CLAUDE.md` et `.claude/launch.json`.
-
-## 3. « App » sur l'écran d'accueil (PWA)
-
-Sur Android, l'installation en vraie PWA demande HTTPS : à combiner avec GitHub Pages.
-
-- `manifest.json` (nom, icône M'Chou 192/512 px, `display: standalone`, couleurs `#3A0B40`) ;
-- `<meta name="theme-color">` et lien vers le manifest dans le `<helmet>` ;
-- Chrome propose « Installer l'application » ; un service worker n'est utile que si on veut
-  le hors-ligne (pas prévu).
+- Déployer sur **GitHub Pages** (dépôt public, ou compte payant pour un dépôt privé).
+- Tester le **piège d'encodage** : le runtime charge les écrans en `screens%2F<id>.dc.html`
+  (slash encodé). Notre serveur Python le résout ; GitHub Pages peut-être pas. Si ça casse :
+  noms à plat sans sous-dossier, ou copie des fichiers sous le nom encodé au déploiement.
+- Sur le téléphone : ouvrir l'URL dans Chrome, puis menu ⋮ → « Installer l'application »
+  (ou « Ajouter à l'écran d'accueil »).
+- Internet reste nécessaire (React via unpkg, polices, icônes, tuiles OSM).
 
 ## Alternative rapide : même Wi-Fi
 
 Serveur en `--bind 0.0.0.0`, autoriser Python dans le pare-feu Windows, ouvrir
-`http://<IP-du-PC>:8765/…` sur le téléphone. Pas d'installation PWA (pas d'HTTPS), mais simple
-pour tester.
+`http://<IP-du-PC>:8765/` sur le téléphone. Pas d'installation PWA (pas d'HTTPS).

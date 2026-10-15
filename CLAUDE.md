@@ -20,11 +20,11 @@ Méthodologie de travail détaillée : [.notes/methodologie.md](.notes/methodolo
 
 | Fichier | Rôle |
 |---|---|
-| `Ordering Prototype.dc.html` | Coquille du prototype : panneau de gauche, cadre téléphone, barre d'état, nav, sheets, toast, **toute la logique** |
+| `Ordering-Prototype.dc.html` | Coquille du prototype : panneau de gauche, cadre téléphone, barre d'état, nav, sheets, toast, **toute la logique** |
 | `screens/<id>.dc.html` | Template d'un écran (12 écrans : splash → track, puis gifts). Pas de logique |
 | `sheets/<nom>.dc.html` | Template d'une feuille (bottom sheet) importée par la coquille. Pas de logique |
 | `parts/<nom>.dc.html` | Fragment partagé entre écrans/feuilles (ex. `parts/flame` : timeline de la flamme). Pas de logique |
-| `Design System.dc.html` | Référence visuelle : couleurs, typo, formes, espaces, mouvement, icônes, composants |
+| `Design-System.dc.html` | Référence visuelle : couleurs, typo, formes, espaces, mouvement, icônes, composants |
 | `Explorations.dc.html` | Comparaison statique des thèmes « Nutella Fun » (clair) et « Fidèle » (retenu) |
 | `tokens/mchou.tokens.css` / `.json` | Tokens du design system (v0.2). **Non consommés par les pages** — voir plus bas |
 | `support.js` | Runtime « dc » de Claude Design (généré). **Ne pas modifier** |
@@ -40,7 +40,7 @@ Les pages doivent être servies en HTTP (pas en `file://`) et ont besoin d'inter
 
 - Dans Claude Code : config `prototype` de `.claude/launch.json` (port 8765).
 - À la main : `python -m http.server 8765 --bind 127.0.0.1` puis
-  `http://localhost:8765/Ordering%20Prototype.dc.html`.
+  `http://localhost:8765/Ordering-Prototype.dc.html`.
 
 Le 404 sur `.image-slots.state.json` est normal (fichier de persistance propre à Claude Design).
 
@@ -100,7 +100,15 @@ Chaque page = un template dans `<x-dc>…</x-dc>` + (optionnel) un script de log
   sheets vont dans `sheets/` ; les anciennes sont encore inline dans la coquille.
 - Réglages : constante `TW = { sound, reduceMotion, rtl }`. `rm()` respecte aussi le réglage
   « réduire les animations » du système.
-- Cadre téléphone 390×844 avec mise à l'échelle auto.
+- Cadre téléphone 390×844 avec mise à l'échelle auto. **Mode téléphone** (`MOB` : `?mobile` ou écran
+  ≤ 600 px) : plein écran, sans panneau, cadre ni fausse barre d'état ; largeur 390 mise à
+  l'échelle de l'écran, hauteur adaptée (`ph`). `manifest.json` + `icons/` : installable sur
+  l'écran d'accueil (PWA, ouvre `?mobile`). `index.html` redirige vers la coquille.
+- Pas de favoris dans l'app (retirés). Paiement : carte en 1re position et cochée par défaut,
+  espèces à la livraison en 2e, sans choix du billet.
+- Profil (`screens/profile`) : prénom (`fname`, réutilisé dans les messages), téléphone,
+  anniversaire saisissable une seule fois (`bday`), adresse, historique `orders`, carte
+  enregistrée `savedCard`, langue, aide et compte. Spec : `.notes/ecrans/profil.md`.
 
 ### Ajouter un écran
 
@@ -112,12 +120,12 @@ Chaque page = un template dans `<x-dc>…</x-dc>` + (optionnel) un script de log
 
 ## Conventions du design system (thème « Fidèle »)
 
-Source de vérité : `Design System.dc.html` + `tokens/`. Résumé :
+Source de vérité : `Design-System.dc.html` + `tokens/`. Résumé :
 
 - **Couleurs** : fond plum 900 `#3A0B40`, cartes/inputs plum 800 `#4E1256`, barre plum 950
   `#24062A`, texte crème `#FFF6E9`, texte secondaire lilas `#E9D3EE`, nav inactive `#C9A9D1`,
   prix/actif/script banane `#FFD84D`. CTA = dégradé caramel `#FFD36B → #F7B538` avec lèvre
-  `#C98A12`. Framboise `#FF4D6D` uniquement favoris/badges/promos flash ; erreurs `#FF6B85` ;
+  `#C98A12`. Framboise `#FF4D6D` uniquement flamme/badges/promos flash ; erreurs `#FF6B85` ;
   succès pistache `#8FCB6B`.
 - **Un seul CTA doré par écran** (plus les prix). Les éléments dorés reposent sur une « lèvre »
   de 4 px (box-shadow) pour paraître pressables.

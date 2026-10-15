@@ -16,7 +16,7 @@ tombent dans l'assiette, prix qui se recalcule, ajout au panier puis « Une bois
 
 ## Contenu
 
-- En-tête : retour, favori, panier.
+- En-tête : retour, panier (les favoris ont été retirés du projet).
 - Assiette illustrée selon la famille :
   - crêpe : disque doré, nappage étalé sur presque toute la surface (liseré doré visible) ;
   - spaghetti : nid fourni de lanières de crêpe, nappage au centre, quelques lanières posées
