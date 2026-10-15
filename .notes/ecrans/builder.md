@@ -18,15 +18,24 @@ tombent dans l'assiette, prix qui se recalcule, ajout au panier puis « Une bois
 
 - En-tête : retour, favori, panier.
 - Assiette illustrée selon la famille :
-  - crêpe : disque doré pliable, nappage au centre ;
-  - spaghetti : lanières de crêpe en nid, nappage par-dessus ;
-  - gaufre : gaufre quadrillée ;
-  - brownie : carré fondant, **plus grand en taille L** ;
-  - choux : **4 ou 6 choux** selon le choix, glaçage au parfum, crème visible s'ils sont farcis.
+  - crêpe : disque doré, nappage étalé sur presque toute la surface (liseré doré visible) ;
+  - spaghetti : nid fourni de lanières de crêpe, nappage au centre, quelques lanières posées
+    par-dessus ;
+  - gaufre : gaufre quadrillée, nappe brillante qui épouse la grille et **coule sur les bords**
+    (réf. photo M'Chou), coins dorés visibles ;
+  - brownie : pavé rectangulaire, **plus grand en taille L** ; couche de crème fromagère,
+    nappage du parfum qui coule sur la tranche, crumble kunafa pistache sur tout le dessus,
+    zigzag du parfum (ou du 2ᵉ parfum) qui déborde sur l'assiette ;
+  - choux : **4 ou 6 choux** à pointe cannelée (douille), sillons rayonnants, glaçage au
+    parfum, crème visible s'ils sont farcis.
 - Le nappage prend la couleur du parfum (Nutella, pistache, Lotus, Bueno, Oreo, amande,
   chocolat), avec un filet d'une deuxième couleur pour les parfums doubles
   (ex. Nutella crème pistache). Les garnitures du nom (banane, pistache, amande, Lotus, Oreo,
   kunafa, Bueno) sont déjà posées.
+- Garnitures bien visibles : chantilly = **2 rosaces** pochées ; Lotus = 2 biscuits + miettes
+  de spéculoos claires et foncées ; Oreo = 2 biscuits + nombreuses miettes noires et éclats
+  de crème ; kunafa = amas de cheveux d'ange dorés avec éclats de
+  pistache.
 - Fiche : badge (N°1, DROP, Nouveau), nom, prix de la sélection, description courte de la
   famille, pastilles d'ingrédients.
 - Options (si le produit en a) : pièces, façon, crème, taille, avec le prix de chaque choix.
