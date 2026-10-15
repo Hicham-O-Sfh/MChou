@@ -21,8 +21,9 @@ Méthodologie de travail détaillée : [.notes/methodologie.md](.notes/methodolo
 | Fichier | Rôle |
 |---|---|
 | `Ordering Prototype.dc.html` | Coquille du prototype : panneau de gauche, cadre téléphone, barre d'état, nav, sheets, toast, **toute la logique** |
-| `screens/<id>.dc.html` | Template d'un écran (11 écrans : splash → track). Pas de logique |
+| `screens/<id>.dc.html` | Template d'un écran (12 écrans : splash → track, puis gifts). Pas de logique |
 | `sheets/<nom>.dc.html` | Template d'une feuille (bottom sheet) importée par la coquille. Pas de logique |
+| `parts/<nom>.dc.html` | Fragment partagé entre écrans/feuilles (ex. `parts/flame` : timeline de la flamme). Pas de logique |
 | `Design System.dc.html` | Référence visuelle : couleurs, typo, formes, espaces, mouvement, icônes, composants |
 | `Explorations.dc.html` | Comparaison statique des thèmes « Nutella Fun » (clair) et « Fidèle » (retenu) |
 | `tokens/mchou.tokens.css` / `.json` | Tokens du design system (v0.2). **Non consommés par les pages** — voir plus bas |
@@ -81,7 +82,12 @@ Chaque page = un template dans `<x-dc>…</x-dc>` + (optionnel) un script de log
   (suppléments). `buildP()` en déduit `P` (produits par id). Un prix en tableau = un prix par
   combinaison des options qui changent le prix. `optUnit()` calcule un prix, `defLine()` la
   ligne panier par défaut. `CATS` = les 5 familles mises en avant sur Home (`pop: 1`).
-- Ligne de panier : `{ id, v (options lisibles), ex (suppléments), sugar, note, unit, qty }`.
+- Ligne de panier : `{ id, v (options lisibles), ex (suppléments), sugar, note, unit, qty }`, plus
+  `gift: <k>` pour un cadeau (unit 0, pas de stepper, Miams rendus si on le retire).
+- Fidélité : `miams` est un solde (1 DH = 1 Miam). `GIFTS` = les 11 cadeaux (options figées,
+  jamais de builder), `redeem()` débite et ajoute au panier. `FLAME` : une flamme par semaine
+  avec commande, sans grâce, +200 Miams toutes les 5. `flame(s)` décrit la timeline.
+  Spec : `.notes/ecrans/cadeaux.md`.
 - `openOpts(id)` route le tap sur un produit : les familles avec `bld` (crêpes, spéciales,
   spaghetti, gaufres, brownies, choux) ouvrent le **builder** (`openBuilder(id)`), les boissons
   et packs ouvrent la feuille d'options (`sheets/options`).
