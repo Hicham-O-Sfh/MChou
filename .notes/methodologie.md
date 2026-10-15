@@ -43,6 +43,7 @@ spécification visuelle et comportementale pour le développement Flutter.
 - `decisions.md` : journal des décisions (date, décision, raison). À créer à la première décision.
 - `ecrans/<id>.md` : spec d'un écran (but, contenu, états, interactions, navigation entrante et
   sortante, cas limites). Sert aussi de base pour le dev Flutter.
+- `mobile.md` : plan pour ouvrir le prototype sur téléphone (mode téléphone, GitHub Pages, PWA).
 - `flutter.md` : notes de passage à Flutter (correspondance composants ↔ widgets, tokens ↔
   `ThemeData`). Plus tard.
 
