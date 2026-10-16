@@ -137,3 +137,9 @@ commandes personnalisées. Instagram @mchou._._
   « Chocolat chaud »), noms produits conservés tels quels (« pistachio », « pistachou »).
 - La feuille d'options sert de fiche produit pour les boissons et les packs ; les douceurs
   ouvrent le builder (décision du 2026-10-14, voir builder.md).
+
+## Ordre des familles (2026-10-16)
+
+Choux, Crêpes, Brownies, Gaufres, Spaghetti, Mojitos, Milkshakes, Cocktails, Jus, Boissons chaudes,
+Spéciales, Packs. Même ordre dans les pills du Menu et de Home ; un tap sur une pill de Home ouvre
+le Menu à la section de la famille.

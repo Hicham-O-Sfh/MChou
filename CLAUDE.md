@@ -81,7 +81,12 @@ Chaque page = un template dans `<x-dc>…</x-dc>` + (optionnel) un script de log
   pièces, façon, crème, taille, nature/au lait, arôme), `FLAV` (saveurs du filtre), `EX`
   (suppléments). `buildP()` en déduit `P` (produits par id). Un prix en tableau = un prix par
   combinaison des options qui changent le prix. `optUnit()` calcule un prix, `defLine()` la
-  ligne panier par défaut. `CATS` = les 5 familles mises en avant sur Home (`pop: 1`).
+  ligne panier par défaut. **Ordre de `FAMS`** = ordre des pills et sections partout : Choux,
+  Crêpes, Brownies, Gaufres, Spaghetti, Mojitos, Milkshakes, Cocktails, Jus, Boissons chaudes,
+  Spéciales, Packs. Sur Home, les pills listent toutes les familles et ouvrent le Menu à la
+  section (`famGo(k)`) ; « Les plus aimés » = produits `pop: 1`.
+- Confirmation : directement le livreur en moto (plus de scène crêpe, qui ne collait pas à
+  toutes les commandes).
 - Ligne de panier : `{ id, v (options lisibles), ex (suppléments), sugar, note, unit, qty }`, plus
   `gift: <k>` pour un cadeau (unit 0, pas de stepper, Miams rendus si on le retire).
 - Fidélité : `miams` est un solde (1 DH = 1 Miam). `GIFTS` = les 11 cadeaux (options figées,
